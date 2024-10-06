@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+		
+		@font-face {
+  			font-family: hand;
+ 			src: url(fonts/handmeds.ttf);
+		}
+		
+		@font-face {
+  			font-family: ebold;
+ 			src: url(fonts/eina/Eina01-Bold.ttf);
+		}
+
+		@font-face {
+  			font-family: ereg;
+ 			src: url(fonts/eina/Eina01-Regular.ttf);
+		}
+		
+		@font-face {
+  			font-family: eit;
+ 			src: url(fonts/eina/Eina01-Regularitalic.ttf);
+		}
+    
+		body {
+   			margin: 0;
+			padding: 0;
+			overflow: hidden;
+		}
+        
+        
+        
+/*above fold*/
+		#me{
+			z-index:99999999;
+			position:absolute;
+		}
+		
+		#about{
+			display:none;
+		}
+		
+		
+		#aboutall{
+			position:absolute;
+			z-index:99999;
+			width:100%;
+			height:100%;
+			top:30%;
+			margin-right:20vw;
+			margin-left:20vw;
+			width:60vw;
+			opacity:0;
+			
+			transition: opacity 1s;
+		}
+
+		#whatis{
+			color:white;
+			text-align: center;
+			height:auto;
+			font-family:ereg;
+			font-size:4vh;
+		}
+
+		#tpi4u{
+			color:white;
+			text-align: center;
+			height:auto;
+			font-family:ereg;
+			font-size:2vh;
+		}
+
+
+		#blurrer{
+			width:100%;
+			height:100%;
+			z-index:41;
+			position:absolute;
+			top:0;
+			left:0;
+            backdrop-filter: blur(10px); /* Adjust the blur radius as needed */
+            /* opacity: 0.99; /* Adjust the overlay opacity */ */
+            opacity:0;
+            
+            transition: opacity 1s;
+		}
+
+		#blurcolor{
+			width:100%;
+			height:100%;
+			z-index:42;
+			position:absolute;
+			top:0;
+			left:0;
+			background-color:#1a0007;
+			opacity:0;
+			
+			transition: opacity 1s;
+		}
+		
+		
+		/*tpi4u homescreen container*/
+        .video-container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+		
+		/*video specific container*/
+        .video-box {
+            width: calc(100% / 1.3);
+            height: calc(100vh / 1.3);
+            overflow: hidden;
+            opacity: 1;
+            transition: opacity 0.7s ease;
+        }
+        
+        /*green pink video*/
+        #videoBox1 {
+        	position: fixed;
+        	cursor:pointer;
+        }
+        
+        /*gray video*/
+        #videoBox2 {
+        	position: fixed;
+        	opacity:0;
+        }
+        
+        /*yellow video*/
+        #videoBox3 {
+        	position: fixed;
+        	opacity:0;
+        }
+        
+        /*video specific class*/
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+		
+		
+		
+/*textbox styles*/
+        .text-box {
+        	background-color:rgba(13,13,13,0);
+			height:auto;
+			width: 100%;
+			outline:none;
+			border:none;
+			text-align:center;
+			padding:0;
+			box-sizing:border-box;
+			
+			font-family:hand;
+            transition: .5s;
+            color:black;
+            font-size: 7vh;
+        }
+        
+        /*textbox hover effect*/
+        .text-box:hover{
+        	transform: scale(1.13);
+        }
+        
+		/*pink textbox underline*/
+		.pinkline {
+			/* width:100%; */
+			margin-left:10%;
+			margin-right:10%;
+			height:7px;
+			background-color:#d3325f;
+			border-radius:2rem;
+        }
+        
+        /*pink line and textbox holder*/
+        .textholder {
+        	position:fixed;
+			width:20vw;
+			height:auto;
+			top: 35px;
+            right: 30px;
+		}
+
+
+
+/*move down arrow*/
+		#moveDownButton {
+            position: fixed;
+            bottom: -10vh;
+            left: 50%; /* Centered */
+            transform: translateX(-50%); /* Centered */
+            
+            background-image: url(photos/uarrow.png);
+            background-size:contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            
+            background-color: transparent;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            width:auto;
+            height:10vh;
+            cursor: pointer;
+            z-index:100;
+            
+            opacity:0;
+        }
+        
+        
+/*below fold*/
+		
+		/*entire container*/
+		#workcontainer{
+        	height:100%;
+        	width:100%;
+        	position: fixed;
+        	top:100%;
+        	left:0;
+        	z-index:-10;
+        }
+        
+        /*video/image container*/
+		#container {
+			position: absolute;
+			top: 40%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			width: 65vmin;
+			height: 65vmin;
+			z-index: -1;
+			overflow: hidden;
+		}
+        
+        /*video styles*/
+		#video-background {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			object-fit: contain;
+		}
+  		
+  		/*image styles*/
+		#image {
+    		position: absolute;
+    		border-radius:.7rem;
+    		top: 50%;
+    		left: 50%;
+    		width: 75%;
+    		height: 75%;
+    		object-fit: cover;
+    		transform: translate(-50%, -50%) rotate(0deg) translateX(0); /* Initial rotation angle and sway */
+		}
+
+		/*main text container*/
+		.text-container {
+			position:absolute;
+			top: 70%;
+			text-align: center;
+			margin-right:15vw;
+			margin-left:15vw;
+			width:70vw;
+			height:auto;
+		}
+
+		/*header text*/
+		.title{
+			font-family:ebold;
+			cursor:default;
+			color:#a2c20e;
+			font-size:2rem;
+			transition:.9s;
+			z-index:200;
+			margin-top:.5rem;
+			margin-bottom:.5rem;
+		  	z-index:1000;
+		}
+		
+		/*title hover (broken idk why)*/
+		.title:hover{
+			transform:scale(1.1);
+			margin:.5rem;
+			color:#d5305e;
+		}
+		
+		/*piece description text*/
+		.desc{
+			font-family:ereg;
+			cursor:default;
+			color:#a2c20e;
+			font-size:.9rem;
+			margin:0;
+		}
+		
+		.coords{
+			font-family:eit; 
+		}
+		
+		
+		
+/*credited code*/
+        /*placeholder styling, courtesy of W3Schools*/
+        ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+		color: black;
+		opacity: 1; /* Firefox */
+		}
+
+		:-ms-input-placeholder { /* Internet Explorer 10-11 */
+		color: black;
+		}
+
+		::-ms-input-placeholder { /* Microsoft Edge */
+		color: black;
+		}
+		
+		/*placeholder text fade, courtesy of James Wilson on StackOverflow*/
+		::-webkit-input-placeholder { opacity: 1; -webkit-transition: opacity .5s; transition: opacity .5s; }  /* Chrome <=56, Safari < 10 */
+		:-moz-placeholder { opacity: 1; -moz-transition: opacity .5s; transition: opacity .5s; } /* FF 4-18 */
+		::-moz-placeholder { opacity: 1; -moz-transition: opacity .5s; transition: opacity .5s; } /* FF 19-51 */
+		:-ms-input-placeholder { opacity: 1; -ms-transition: opacity .5s; transition: opacity .5s; } /* IE 10+ */
+		::placeholder { opacity: 1; transition: opacity .5s; } /* Modern Browsers */
+    
+		*:focus::-webkit-input-placeholder { opacity: 0; } /* Chrome <=56, Safari < 10 */
+		*:focus:-moz-placeholder { opacity: 0; } /* FF 4-18 */
+		*:focus::-moz-placeholder { opacity: 0; } /* FF 19-50 */
+		*:focus:-ms-input-placeholder { opacity: 0; } /* IE 10+ */
+		*:focus::placeholder { opacity: 0; } /* Modern Browsers */
+		
+		
+		
+/*media queries*/
+		
+		@media only screen and (max-width: 1200px) {
+			.textholder {
+				width:25vw;
+			}
+			
+			.text-box{
+				font-size:6vh;
+			}
+			
+			
+		}
+
+		@media only screen and (max-width: 1000px) {
+			.text-container {
+				margin-right:10vw;
+				margin-left:10vw;
+				width:80vw;
+			}
+
+			.title{
+				font-size:1.5rem;
+			}
+			
+			.desc{
+				font-size:1.5vh;
+			}
+			
+			#aboutall{
+				top:17%;
+			}
+			
+			
+			.pinkline{
+				height:7px;
+			}
+			
+			.textholder {
+				width:22vw;
+			}
+			
+			.text-box{
+				font-size:5vh;
+			}
+			
+			
+		}
+
+		@media only screen and (max-width: 760px) {
+  			.text-box {
+   				 font-size: 4vh;
+ 			}
+ 			
+ 			.pinkline {
+				height:6px;
+
+ 			}
+
+        	.textholder {
+				width: 25vw;
+			}
+			
+			
+			
+			.text-container {
+				top: 67%;
+				margin-right:5vw;
+				margin-left:5vw;
+				width:90vw;
+			}
+			
+			#aboutall{
+				top:15%;
+			}
+			
+		}
+		
+		
+		
+		@media only screen and (max-width: 580px) {
+			#container {
+				width: 80vmin;
+				height: 80vmin;
+				top: 38%;
+			}
+			
+			.text-container {
+				top: 65.5%;
+			}
+
+			.textholder {
+				width: 40vw;
+			}
+			
+			.pinkline{
+				height:5px;
+			}
+	
+			
+		}
+ 
+		
+		@media only screen and (max-width: 450px) {
+ 			.textholder {
+				width: 40vw;
+			}
+			
+        	.text-box {
+            	font-size: 3.5vh;
+       		}
+        
+			.pinkline {
+				height:4px;
+        	}
+			
+			
+ 			.title{
+				font-size:1.2rem;
+			}
+
+			#container {
+				width: 90vmin;
+				height: 90vmin;
+			}
+			
+			.text-container {
+				top: 62%;
+			}
+			
+			#aboutall{
+				margin-right:7vw;
+				margin-left:7vw;
+				width:86vw;
+				top:10%;
+			}
+			
+		}
+
+		@media only screen and (max-width: 320px) {
+			/* description format query */
+			#whatis{
+				font-size:8vw;
+			}
+
+			#tpi4u{
+				font-size:4vw;
+			}
+			
+
+			/* textbox format query */
+ 			.textholder {
+				width: 50vw;
+			}
+			
+        	.text-box {
+            	font-size: 3vh;
+       		}
+        
+			.pinkline {
+				height:4px;
+        	}
+			
+			
+ 			.title{
+				font-size:1.2rem;
+			}
+
+			#container {
+				width: 90vmin;
+				height: 90vmin;
+			}
+			
+			.text-container {
+				top: 62%;
+			}
+			
+			#aboutall{
+				margin-right:7vw;
+				margin-left:7vw;
+				width:86vw;
+				top:10%;
+			}
+			
+		}
+
+
+        
+</style>
+    
+<title>this piece is for you.</title>
+<link rel="icon" type="image/x-icon" href="webmedia/icon.ico">
+</head>
+
+
+<body>
+
+<button id="me">click</button>
+
+<div id="about">
+
+	<div id="aboutall">
+		<h1 id="whatis">what is tpi4u?</h1>
+		<p id="tpi4u">Ut faucibus pulvinar elementum integer enim. Vehicula ipsum a 
+		arcu cursus. Felis bibendum ut tristique et egestas. Odio ut enim blandit volutpat 
+		maecenas volutpat blandit aliquam. Amet mattis vulputate enim nulla aliquet. 
+		Mauris in aliquam sem fringilla ut morbi tincidunt augue interdum. Quis varius 
+		quam quisque id diam vel quam elementum pulvinar. Adipiscing vitae proin sagittis 
+		nisl. Sit amet consectetur adipiscing elit pellentesque habitant morbi. Euismod 
+		quis viverra nibh cras pulvinar. Maecenas ultricies mi eget mauris pharetra et. 
+		Turpis egestas pretium aenean pharetra magna ac. Nibh tellus molestie nunc non 
+		blandit massa. Rhoncus dolor purus non enim praesent elementum facilisis. Dictum 
+		fusce ut placerat orci nulla pellentesque dignissim enim sit. Euismod lacinia at 
+		quis risus. Commodo odio aenean sed adipiscing diam donec adipiscing.</p>
+	</div>
+	
+	<div id="blurrer"></div>
+	<div id="blurcolor"></div>
+</div>
+
+<!--landingpage-->
+    <div class="video-container">
+        <div class="video-box" id="videoBox1"> <!--pink and green video-->
+            <video autoplay loop muted>
+                <source src="vid/pg.m4v" type="video/mp4" style="opacity: 1;">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="video-box" id="videoBox2"> <!--gray video-->
+            <video autoplay loop muted>
+                <source src="vid/g.m4v" type="video/mp4" style="opacity: 0;">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="video-box" id="videoBox3"> <!--yellow video-->
+            <video autoplay loop muted>
+                <source src="vid/y.m4v" type="video/mp4" style="opacity: 0;">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+    
+<!--text box-->
+    <div class="textholder">
+        <input type="text" class="text-box" id="textBox" maxlength="5" placeholder="?????" spellcheck="false">
+        <div class="pinkline"></div>
+    </div>
+    
+<!-- Move Down Button -->
+    <button id="moveDownButton"></button>
+    
+    
+<!--picture and text container-->
+<div id="workcontainer"> <!--main container-->
+    
+    <div id="container"> <!--picture and video container-->
+  		<video id="video-background" autoplay muted loop>
+    		<source src="vid/wg.m4v" type="video/mp4">
+    		Your browser does not support the video tag.
+ 		</video>
+  		<img id="image" src="https://cdn.discordapp.com/attachments/1292157504070881312/1292157577492172830/pgberries.jpg?ex=6702b705&is=67016585&hm=fee69a34454feeab2545543c124682d24fec0976e01dabefa0e1943866eda736&" alt="pink and green berries">
+  	</div>
+
+	<div class="text-container"> <!--text/title holder-->
+  		<p class="title">pink and green berries</p>
+  		<p class="desc"><span class="coords">(40.2724051, -76.9898047)</span> - Ipsum faucibus vitae aliquet nec ullamcorper sit. Mauris pharetra 
+  		et ultrices neque ornare aenean. Sed vulputate mi sit amet. Pulvinar etiam non quam 
+  		lacus suspendisse faucibus interdum posuere. Ornare aenean euismod elementum nisi. 
+  		Pellentesque elit eget gravida cum sociis natoque. Feugiat scelerisque varius morbi 
+  		enim. Massa eget egestas purus viverra accumsan in. Pharetra sit amet aliquam id. 
+  		Nunc id cursus metus aliquam eleifend mi in nulla posuere. Eu consequat ac felis 
+  		donec et odio pellentesque. Facilisis magna etiam tempor orci. Id aliquet lectus 
+  		proin nibh nisl condimentum id. </p>
+	</div>
+	
+</div>
+    
+
+
+<!-- <script>
+    const textBox = document.getElementById('textBox');
+    const videoBox1 = document.getElementById('videoBox1');
+    const videoBox2 = document.getElementById('videoBox2');
+    const videoBox3 = document.getElementById('videoBox3');
+    const workcontainer = document.getElementById('workcontainer');
+    const moveDownButton = document.getElementById('moveDownButton');
+    const image = document.getElementById("image");
+  
+  const toggleButton = document.getElementById("me");
+  const container = document.getElementById("about");
+  const blurrer = document.getElementById("blurrer");
+  const blurcolor = document.getElementById("blurcolor");
+  const aboutall = document.getElementById("aboutall");
+    
+    let videosUp = false;
+
+    // Set initial transition properties
+    videoBox1.style.transition = 'transform 1s ease, opacity 0.7s ease';
+    videoBox2.style.transition = 'transform 1s ease, opacity 0.7s ease';
+    videoBox3.style.transition = 'transform 1s ease, opacity 0.7s ease';
+    workcontainer.style.transition = 'transform 1s ease, opacity 0.7s ease';
+    moveDownButton.style.transition = 'bottom 1s ease';
+
+    // Function to handle moving the videos up
+    function moveVideosUp() {
+        if (textBox.value === '32490') {
+            videosUp = true;
+            videoBox1.style.transform = 'translateY(-120%)';
+            videoBox2.style.transform = 'translateY(-120%)';
+            videoBox3.style.transform = 'translateY(-120%)';
+            workcontainer.style.transform = 'translateY(-100%)';
+            moveDownButton.style.bottom = 'calc(100vh - 5rem)';
+
+            // Text color change animation
+            textBox.style.color = '#f5d554';
+            setTimeout(() => {
+                textBox.style.color = '#d5305e';
+                setTimeout(() => {
+                    textBox.style.color = 'black';
+                    setTimeout(() => {
+                        textBox.style.color = 'black';
+                    }, 200); //back to black
+                }, 200); // change to black
+            }, 400); // change to pink
+        }
+    }
+
+    // Function to handle moving the videos down
+    function moveVideosDown() {
+        videosUp = false;
+        videoBox1.style.transform = 'translateY(0)';
+        videoBox2.style.transform = 'translateY(0)';
+        videoBox3.style.transform = 'translateY(0)';
+        workcontainer.style.transform = 'translateY(0)';
+        moveDownButton.style.bottom = '-4rem';
+    }
+
+    // Function to handle cursor change when hovering over the video boxes
+    function handleCursorChange() {
+        if (textBox.value === '32490') {
+            videoBox1.style.cursor = 'pointer';
+            videoBox2.style.cursor = 'pointer';
+            videoBox3.style.cursor = 'pointer';
+        } else {
+            videoBox1.style.cursor = 'default';
+            videoBox2.style.cursor = 'default';
+            videoBox3.style.cursor = 'default';
+        }
+    }
+
+    textBox.addEventListener('keyup', (event) => {
+        if (event.key === 'Enter') {
+            const value = textBox.value.trim();
+            if (value === '32490') {
+                moveVideosUp();
+            }
+        }
+    });
+    
+    
+	let angle = 0; // Initial rotation angle
+	let sway = 0; // Initial sway position
+	let swayDirection = 1; // To control the sway direction
+  
+	// Function to animate the image in a circular path with swaying
+	function animateImage() {
+    	angle += 1.7; // Adjust the angle increment for slower rotation
+    	sway += 0.01 * swayDirection; // Adjust the sway increment for slower swaying
+    
+    	// Reverse the sway direction at a sway angle of .9 degrees
+    	if (Math.abs(sway) >= .9) {
+			swayDirection *= -1;
+		}
+    
+		const radius = 0.7; // Adjust the radius of the circular path
+    
+		const x = radius * Math.cos(angle * (Math.PI / 180)); // Calculate new X position
+    	const y = radius * Math.sin(angle * (Math.PI / 180)); // Calculate new Y position
+    
+    	image.style.transform = `translate(-50%, -50%) rotate(${sway}deg) translate(${x}%, ${y}%)`; // Apply transform
+    	requestAnimationFrame(animateImage); // Request the next animation frame
+	}
+  
+	animateImage(); // Start the animation
+
+	moveDownButton.addEventListener('click', moveVideosDown);
+	
+	  
+	  
+	  let isOpen = false;
+
+	toggleButton.addEventListener("click", () => {
+	
+		if (!isOpen) {
+			container.style.display = "block";
+			setTimeout(() => { blurrer.style.opacity = "0.99"; }); // Delay for opacity transition effect
+			setTimeout(() => { blurcolor.style.opacity = "0.7"; }); // Delay for opacity transition effect
+			setTimeout(() => { aboutall.style.opacity = "1"; }); // Delay for opacity transition effect
+    	} else {
+			blurrer.style.opacity = "0";
+			blurcolor.style.opacity = "0";
+			aboutall.style.opacity = "0";
+			setTimeout(() => {
+			container.style.display = "none"; // Set display none after opacity transition
+      	}, 1000); // Delay to match opacity transition duration
+		
+		}
+		
+	isOpen = !isOpen;
+  	});
+	
+	
+	
+	
+
+    // Add click event listeners to video boxes
+    videoBox1.addEventListener('click', moveVideosUp);
+    videoBox2.addEventListener('click', moveVideosUp);
+    videoBox3.addEventListener('click', moveVideosUp);
+
+    // Handle cursor change when hovering over video boxes
+    videoBox1.addEventListener('mouseover', handleCursorChange);
+    videoBox2.addEventListener('mouseover', handleCursorChange);
+    videoBox3.addEventListener('mouseover', handleCursorChange);
+
+    // Reset cursor when moving out of video boxes
+    videoBox1.addEventListener('mouseout', () => {
+        videoBox1.style.cursor = 'default';
+    });
+    videoBox2.addEventListener('mouseout', () => {
+        videoBox2.style.cursor = 'default';
+    });
+    videoBox3.addEventListener('mouseout', () => {
+        videoBox3.style.cursor = 'default';
+    });
+
+    textBox.addEventListener('input', () => {
+        if (videosUp) {
+            if (textBox.value.length < 5) {
+                moveVideosDown();
+            }
+        }
+        if (textBox.value.length === 5) {
+            if (textBox.value === '32490') {
+                videoBox1.style.opacity = '0';
+                videoBox2.style.opacity = '0';
+                videoBox3.style.opacity = '1';
+            } else {
+                videoBox1.style.opacity = '0';
+                videoBox2.style.opacity = '1';
+                videoBox3.style.opacity = '0';
+            }
+        } else {
+            videoBox1.style.opacity = '1';
+            videoBox2.style.opacity = '0';
+            videoBox3.style.opacity = '0';
+        }
+    });
+    
+    
+    
+
+    
+</script> -->
+
+<script src="tpi4u.js"></script>
+
+
+</body>
+</html>
